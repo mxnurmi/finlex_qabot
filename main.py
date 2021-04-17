@@ -20,23 +20,27 @@ def fetchLawData(q, endpoint):
     
     sparql.setQuery(q)
     
-    results = sparql.query().convert()
-    
-    for result in results["results"]["bindings"]:
-        item = result["content"]["value"]
-        item = item.encode('utf-8').strip()
-        text.append(item)
+    try:
+        jsondata = sparql.query().convert()
+        
+        print(jsondata)
+        
+        for result in jsondata["results"]["bindings"]:
+            item = result["content"]["value"]
+            #item = item.encode('utf-8').strip()
+            text.append(item)
+    except Exception as e:
+        print("The data fetch failed", e)
         
     
-    #for row in res.fetchall():
-        #print row
-        #resp = sparql.unpack_row(row)
-        #print(resp)
-        #print(res)
-        #data.append(resp)
-        #print()
+    #Return only the latest item TODO: we should update the queries so that they only fetch latest
+    lex = text[-1]
       
-    return text
+    return lex
+
+
+def preprocessLawText(text):
+    return 0
 
 
 if __name__ == "__main__":
@@ -62,21 +66,34 @@ if __name__ == "__main__":
     
        # replace sfl:text with sfl:html for html version
        ?format sfl:text ?content.}
-    """)
+      """)
+    
     
 
     lex = fetchLawData(q2, endpoint)
 
+    print(lex)
+    #everything = []
+    
+    #paragraphs = lex.split("\n")
+    #print(paragraphs)
+    
 
-    everything = []
-
-    for item in lex:
+    #for word in lex:
         #print("hep")
         #print(type(item))
-        for word in item.split(" "):
-            everything.append(word)
+        
+        #print(item)
+        
+        #print(type(item))
+        
+        #everything.append(word)
+        
+        #for word in item:
+            #print(word)
+            #everything.append(word)
             
-    everything2 = [string for string in everything if string != ""]
+    #everything2 = [string for string in everything if string != ""]
     
 #print(t)
 
