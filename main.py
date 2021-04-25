@@ -234,9 +234,9 @@ def searchTool(search_query):
     answers = searchFromIndexedLaw(ix=None, querystr=search_query)
 
     #for i,answer in enumerate(answers):
-        #if i == 5:
-            #break
-        #print("Answer number %i: %s" % (i+1,answer))
+     #   if i == 5:
+      #      break
+       # print("Answer number %i: %s" % (i+1,answer))
         #print("")
 
     return answers
@@ -244,5 +244,5 @@ def searchTool(search_query):
 # %%
 #initSearchTool()
 
-#x = searchTool("Vilken typ av dom förskingring kan fördomas?")
+#x = searchTool("Är ett förskingringsförsök straffbart?")
 #print(x[0])
