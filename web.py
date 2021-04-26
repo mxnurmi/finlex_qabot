@@ -12,6 +12,10 @@ model=create_model()
 def front_page():
     searchword = request.args.get('key', '')
     paragraphs=searchTool(searchword)
+    if not paragraphs:
+        print("The search didn\'t return any matching terms")
+        return render_template('search.html',key='',results=[])
+
     texts=list(map(findTitle,paragraphs))
     samples=map(lambda t:t["text"],texts)
     samples=create_samples(samples,searchword)[0:10]
@@ -22,7 +26,6 @@ def front_page():
     highlight_texts=list(map(lambda text,span:highLight(text.context,span),samples,spans))
     for idx,text in enumerate(highlight_texts):
         results.append({"text":text,"title":texts[idx]["title"]})
-    print(samples)
     return render_template('search.html',key=searchword, results=results)
 
 def findSpans(pred_start, pred_end,samples):

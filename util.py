@@ -5,6 +5,7 @@ import tensorflow_hub as hub
 from tensorflow import keras
 from tensorflow.keras import layers
 from tokenizers import BertWordPieceTokenizer
+import os.path
 max_seq_length = 384
 bert_layer = hub.KerasLayer("https://tfhub.dev/tensorflow/bert_multi_cased_L-12_H-768_A-12/4", trainable=True)
 vocab_file = bert_layer.resolved_object.vocab_file.asset_path.numpy().decode("utf-8")
