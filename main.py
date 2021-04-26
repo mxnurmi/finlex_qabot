@@ -42,7 +42,7 @@ def fetchLawData(q, endpoint="http://data.finlex.fi/sparql"):
 # if __name__ == "__main__":
 
 #     #NOTE: spaces in the queries change the querie so be careful with them
-#     q2 = ("""
+#     q1 = ("""
 #       PREFIX sfl: <http://data.finlex.fi/schema/sfl/>
 #       PREFIX eli: <http://data.europa.eu/eli/ontology#>
     
@@ -70,31 +70,6 @@ def fetchLawData(q, endpoint="http://data.finlex.fi/sparql"):
     
     #paragraphs = lex.split("\n")
     #print(paragraphs)
-
-# %%
-
-# q1 = ("""
-#     PREFIX sfl: <http://data.finlex.fi/schema/sfl/>
-#     PREFIX eli: <http://data.europa.eu/eli/ontology#>
-    
-#     # Query : Get different temporal versions of Criminal Code
-#     SELECT ?document_version ?format ?content 
-#     WHERE {
-#     # you can replace <http://data.finlex.fi/eli/sd/1889/39> with eg. one of the following:
-#     # http://data.finlex.fi/eli/sd/1889/39/johtolause
-#     # http://data.finlex.fi/eli/sd/1889/39/luku/1
-#     # http://data.finlex.fi/eli/sd/1889/39/luku/1/pykala/1
-#     <http://data.finlex.fi/eli/sd/1889/39> eli:has_member ?document_version .
-    
-#     # lang options: fin,swe
-#     # format options: txt and html
-#     BIND(IRI(CONCAT(str(?document_version),"/swe/txt")) AS ?format)
-    
-#     # replace sfl:text with sfl:html for html version
-#     ?format sfl:text ?content.}
-#     """)
-
-# lex = fetchLawData(q1, endpoint)
 
 
 def preprocessLawText(txt):
