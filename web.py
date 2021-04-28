@@ -1,7 +1,7 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 from flask import render_template
 from flask import request
-from main import searchTool
+from main import searchTool, initSearchTool
 import numpy as np
 from util import findTitle,highLight,create_model,create_samples,create_inputs
 app = Flask(__name__)
@@ -41,8 +41,13 @@ def findSpans(pred_start, pred_end,samples):
             result.append((0,0))
             continue
         pred_char_start = offsets[start][0]
-        if end < len(offsets):
+        if (end < len(offsets)) and (start < end):
             result.append((pred_char_start,offsets[end][1]))
         else:
             result.append((pred_char_start,len(sample.context)-1))
     return result
+
+@app.route('/init')
+def initialize():
+    initSearchTool()
+    return redirect(url_for('front_page'))

@@ -71,6 +71,9 @@ def split_item(item):
             new = re.sub("\n", " ", new)
             final_items.append(new)
 
+    #print(final_items)
+    " ".join(final_items)
+
     return final_items
 
 
@@ -98,10 +101,18 @@ def preprocessLawText(txt):
         #if (i % 3 == 0 and i != 0):
             #new_item = re.sub("\n", " ", ("" + new_txt_list[i-1] + new_txt_list[i] + new_txt_list[i+1]) )
 
-        if len(item) > length_threshold:
-            new_item = split_item(item)
-        else:
-            new_item = re.sub("\n", " ", item)
+        #if len(new_item) > length_threshold:
+            #print("hep")
+            #new_l = split_item(new_item)
+            #for shorter_item in new_l:
+                 #final_txt.append(shorter_item)
+
+        new_item = item
+        if len(new_item) > length_threshold:
+            new_item = split_item(new_item)
+            #print(new_item)
+        #else:
+            #new_item = re.sub("\n", " ", item)
 
         #if len(new_item < 100):
             #skip_next = True
@@ -135,9 +146,16 @@ def preprocessLawText(txt):
         #else:
             #add_to_next = add_to_next + new_item
             #skip_next = False
+        #print("new")
+        #print(" ")
+        #print(new_item)
+
+        #new_item = re.sub("\n", " ", new_item) 
 
         final_txt.append(new_item)
+    #print(final_txt)
 
+    
     return final_txt
 
 # %%
@@ -147,7 +165,7 @@ def indexLawText(law_as_list):
     Index the preprocessed law text
     
     Parameters:
-    law_as_list: Preprocessed input text
+    law_as_list (list): Preprocessed input text
 
     """
     #TODO:use writer.add_document() to add each pykala per luku
@@ -238,7 +256,7 @@ def initSearchTool(query=None):
             # http://data.finlex.fi/eli/sd/1889/39/johtolause
             # http://data.finlex.fi/eli/sd/1889/39/luku/1
             # http://data.finlex.fi/eli/sd/1889/39/luku/1/pykala/1
-            <http://data.finlex.fi/eli/sd/1889/39> eli:has_member ?document_version .
+            <http://data.finlex.fi/eli/sd/1961/404> eli:has_member ?document_version .
             
             # lang options: fin,swe
             # format options: txt and html
@@ -258,18 +276,19 @@ def searchTool(search_query):
 
     answers = searchFromIndexedLaw(ix=None, querystr=search_query)
 
-    #for i,answer in enumerate(answers):
+    for i,answer in enumerate(answers):
      #   if i == 5:
       #      break
-       # print("Answer number %i: %s" % (i+1,answer))
-        #print("")
+        print("Answer number %i: %s" % (i+1,answer))
+        print("")
 
     return answers
 
 # %%
 initSearchTool()
 
-#x = searchTool("kan jag använda upphovsrättsskyddat material för min akademiska presentation?")
+x = searchTool("kan jag använda material för min vetenskapiska presentation?")
+#x = searchTool("vetenskap")
 #print(x[1])
 
 # %%
