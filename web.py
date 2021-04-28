@@ -41,7 +41,7 @@ def findSpans(pred_start, pred_end,samples):
             result.append((0,0))
             continue
         pred_char_start = offsets[start][0]
-        if (end < len(offsets)) and (start < end):
+        if (end < len(offsets)) and (pred_char_start<offsets[end][1]):
             result.append((pred_char_start,offsets[end][1]))
         else:
             result.append((pred_char_start,len(sample.context)-1))

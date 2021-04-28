@@ -61,7 +61,7 @@ def split_item(item):
             if i == 2:
                 new = "" + split_items[i - 1] + " " + split_items[i] #first item is always title so then we don't add one
             else:
-                new = "" + title + " " + split_items[i - 1] + split_items[i]
+                new = "" + " " + split_items[i - 1] + split_items[i]
 
             new = re.sub("\n", " ", new)
             final_items.append(new)
@@ -256,7 +256,7 @@ def initSearchTool(query=None):
             # http://data.finlex.fi/eli/sd/1889/39/johtolause
             # http://data.finlex.fi/eli/sd/1889/39/luku/1
             # http://data.finlex.fi/eli/sd/1889/39/luku/1/pykala/1
-            <http://data.finlex.fi/eli/sd/1961/404> eli:has_member ?document_version .
+            <http://data.finlex.fi/eli/sd/1889/39> eli:has_member ?document_version .
             
             # lang options: fin,swe
             # format options: txt and html
@@ -276,18 +276,18 @@ def searchTool(search_query):
 
     answers = searchFromIndexedLaw(ix=None, querystr=search_query)
 
-    for i,answer in enumerate(answers):
+    #for i,answer in enumerate(answers):
      #   if i == 5:
       #      break
-        print("Answer number %i: %s" % (i+1,answer))
-        print("")
+        #print("Answer number %i: %s" % (i+1,answer))
+        #print("")
 
     return answers
 
 # %%
-initSearchTool()
+#initSearchTool()
 
-x = searchTool("kan jag använda material för min vetenskapiska presentation?")
+#x = searchTool("kan jag använda material för min vetenskapiska presentation?")
 #x = searchTool("vetenskap")
 #print(x[1])
 

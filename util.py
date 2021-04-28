@@ -93,7 +93,8 @@ def create_inputs(squad_examples):
     return x
 
 def findTitle(text):
-    match = re.search(r"([A-ZÅÄÖ]).*?([A-ZÅÄÖ])", text)
+    #match = re.search(r"([A-ZÅÄÖ]).*?([A-ZÅÄÖ])", text)
+    match = re.search(r"([A-ZÅÄÖ]).*[\n]?([A-ZÅÄÖ])", text)
     second = match.span()[1]
     return {"title":"<h2>"+text[:second-2]+"</h2>","text":text[second-1:]}
 
