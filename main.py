@@ -39,37 +39,39 @@ def fetchLawData(q, endpoint="http://data.finlex.fi/sparql"):
       
     return lex
 
-# if __name__ == "__main__":
+# %%
+#import re
+#item = "Hei testi. Miten menee."
+#match = re.search(r"([A-ZÅÄÖ]).*?([A-ZÅÄÖ])", item)
+#print(match)
 
-#     #NOTE: spaces in the queries change the querie so be careful with them
-#     q1 = ("""
-#       PREFIX sfl: <http://data.finlex.fi/schema/sfl/>
-#       PREFIX eli: <http://data.europa.eu/eli/ontology#>
-    
-#       # Query : Get different temporal versions of Criminal Code
-#       SELECT ?document_version ?format ?content 
-#       WHERE {
-#         # you can replace <http://data.finlex.fi/eli/sd/1889/39> with eg. one of the following:
-#         # http://data.finlex.fi/eli/sd/1889/39/johtolause
-#         # http://data.finlex.fi/eli/sd/1889/39/luku/1
-#         # http://data.finlex.fi/eli/sd/1889/39/luku/1/pykala/1
-#        <http://data.finlex.fi/eli/sd/1889/39> eli:has_member ?document_version .
-    
-#        # lang options: fin,swe
-#        # format options: txt and html
-#        BIND(IRI(CONCAT(str(?document_version),"/fin/txt")) AS ?format)
-    
-#        # replace sfl:text with sfl:html for html version
-#        ?format sfl:text ?content.}
-#       """)
-    
-    #lex = fetchLawData(q2, endpoint)
+# %%
 
-    #print(lex)
-    #everything = []
-    
-    #paragraphs = lex.split("\n")
-    #print(paragraphs)
+def split_item(item):
+    titlesearch = re.sub("\n", " ", item)
+    match = re.search(r"([A-ZÅÄÖ]).*?([A-ZÅÄÖ])", titlesearch)
+    second = match.span()[1]
+    title = titlesearch[:second-2]
+
+    split_items = re.split("\n", item)
+    final_items = []
+
+    for i, split_item in enumerate(split_items):
+        if (i != 0 and i % 2 == 0):
+            if i == 2:
+                new = "" + split_items[i - 1] + " " + split_items[i] #first item is always title so then we don't add one
+            else:
+                new = "" + title + " " + split_items[i - 1] + split_items[i]
+
+            new = re.sub("\n", " ", new)
+            final_items.append(new)
+
+        if i == (len(split_items) - 1) and i % 2 != 0:
+            new = "" + title + split_item
+            new = re.sub("\n", " ", new)
+            final_items.append(new)
+
+    return final_items
 
 
 def preprocessLawText(txt):
@@ -80,12 +82,60 @@ def preprocessLawText(txt):
     #print(test_txt[29])
 
     new_txt = re.sub("\n+", "\n", txt) #remove when multiple \n
-    new_txt_list = re.split("\n\d+ §", new_txt)
+    new_txt_list = re.split("\n\d+ §", new_txt) # #[.]\s
+    #print(new_txt_list)
 
     final_txt = []
+    #maxi = -1
+    #mini = 10000
+    #mini_thres = 30
+    #count = 0
+
+    length_threshold = 1000
     for item in new_txt_list:
-        new_item = re.sub("\n", " ", item)
+        
+        #check_item = add_to_next + item
+        #if (i % 3 == 0 and i != 0):
+            #new_item = re.sub("\n", " ", ("" + new_txt_list[i-1] + new_txt_list[i] + new_txt_list[i+1]) )
+
+        if len(item) > length_threshold:
+            new_item = split_item(item)
+        else:
+            new_item = re.sub("\n", " ", item)
+
+        #if len(new_item < 100):
+            #skip_next = True
+            #add_to_next = add_to_next + new_item
+
         #print(len(new_item))
+
+
+        # val = len(new_item)
+
+        # if val < mini_thres:
+        #     count += 1
+
+        # if (val > maxi):
+        #     maxi = len(new_item)
+        
+        # if (val < mini):
+        #     mini = len(new_item)
+
+        # print("max, min")
+        # print(maxi, mini)
+
+        #print(len(new_item))
+
+        #if i == (len(new_txt_list) - 1):
+            #skip_next = False
+
+        #if skip_next == False:
+            #final_txt.append(new_item)
+            #add_to_next = ""
+        #else:
+            #add_to_next = add_to_next + new_item
+            #skip_next = False
+
         final_txt.append(new_item)
 
     return final_txt
@@ -184,7 +234,7 @@ def initSearchTool(query=None):
             # Query : Get different temporal versions of Criminal Code
             SELECT ?document_version ?format ?content 
             WHERE {
-            # you can replace <http://data.finlex.fi/eli/sd/1889/39> with eg. one of the following:
+            # you can replace <http://data.finlex.fi/eli/sd/1889/39> with eg. one of the following: #copyright = 1961/404
             # http://data.finlex.fi/eli/sd/1889/39/johtolause
             # http://data.finlex.fi/eli/sd/1889/39/luku/1
             # http://data.finlex.fi/eli/sd/1889/39/luku/1/pykala/1
@@ -202,7 +252,7 @@ def initSearchTool(query=None):
 
     lex = fetchLawData(q)
     preprosessed_lex = preprocessLawText(lex)
-    ix = indexLawText(preprosessed_lex)
+    _ix = indexLawText(preprosessed_lex)
 
 def searchTool(search_query):
 
@@ -217,7 +267,9 @@ def searchTool(search_query):
     return answers
 
 # %%
-#initSearchTool()
+initSearchTool()
 
-#x = searchTool("Är ett förskingringsförsök straffbart?")
-#print(x[0])
+#x = searchTool("kan jag använda upphovsrättsskyddat material för min akademiska presentation?")
+#print(x[1])
+
+# %%

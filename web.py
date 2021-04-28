@@ -22,6 +22,7 @@ def front_page():
     inputs=create_inputs(samples)
     pred_start, pred_end = model.predict(inputs)
     spans=findSpans(pred_start, pred_end,samples)
+    print(spans)
     results=[]
     highlight_texts=list(map(lambda text,span:highLight(text.context,span),samples,spans))
     for idx,text in enumerate(highlight_texts):
